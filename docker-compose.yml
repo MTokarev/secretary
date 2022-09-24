@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  secretary:
+    image: ${DOCKER_REGISTRY-}secretary
+    build:
+      context: .
+      dockerfile: ./Dockerfile

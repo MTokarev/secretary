@@ -1,0 +1,234 @@
+/* You can add global styles to this file, and also import other style files */
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+
+html, body { height: auto; }
+
+body { margin: 0; font-family: Montserrat, "Helvetica Neue", sans-serif; background-color: #EEE2DC; }
+
+.no-text-decoration {
+  text-decoration: none;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.purple-hover {
+  color: black;
+  transition: all .5s ease;
+}
+
+.purple-hover:hover {
+  color: blueviolet;
+}
+
+.crossed-border {
+  margin: 10%;
+
+  border: rgb(85, 87, 88) dotted 2px;
+  border-radius: 25px;
+}
+
+.relative-centric {
+  position: relative;
+  bottom: 6px;
+}
+
+.margin-t-b-1 {
+  margin: 1% 0% 1% 0%;
+}
+
+.flexbox-container {
+  display: flex;
+}
+
+.flex-row {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+}
+
+.invalid-control {
+  -webkit-animation: invalid-control 3s infinite; 
+  
+  /* Internet Explorer */
+  -ms-animation: invalid-control 3s infinite;
+  
+  /* Standard Syntax */
+  animation: invalid-control 3s infinite;
+}
+
+.btn-white {
+  border-color: white;
+  color: white;
+}
+
+.btn-olive {
+  border-color: #6B8E23;
+  color: #6B8E23;
+}
+
+.btn-round {
+  user-select: none;
+  border-radius: 25px;
+  border-style: solid;
+  background-color: transparent;
+  min-width: 190px;
+  min-height: 45px;
+  cursor: pointer;
+  transition: all .5s ease;
+}
+
+.btn-round:disabled {
+  border: 1px solid #999999;
+  background-color: #cccccc;
+  color: #616060;
+}
+
+.btn-round:focus,
+.btn-round:hover {
+  animation-duration: 0.25s;
+  box-shadow: 0 14px 28px rgba(212, 139, 44, 0.25), 0 10px 10px rgba(205, 10, 196, 0.22);
+}
+
+@keyframes invalid-control{
+  0%{color:red;}	
+	110%{color: black;}
+}
+
+input, textarea, .card, .alert{
+  border-radius: 25px;
+  border-style: none;
+}
+
+textarea {
+  padding: 3px;
+}
+
+/* tooltip setup */
+.qtip {
+  position: relative;
+  cursor: pointer;
+  box-sizing: border-box;
+  transition: all .25s ease-in-out
+}
+/*the tip*/
+.qtip:before {
+  content: attr(data-tip);
+  font-size: 14px;
+  position: absolute;
+  background: rgba(10, 20, 30, 0.85);
+  color: #fff;
+  line-height: 1.2em;
+  padding: 0.5em;
+  font-style: normal;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  min-width: 120px;
+  text-align: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: all .3s ease-in-out;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+  font-family: sans-serif;
+  letter-spacing: 0;
+  font-weight: 600
+}
+.qtip:after {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  content: '';
+  position: absolute;
+  opacity: 0;
+  visibility: hidden;
+  transition: all .3s ease-in-out
+}
+.qtip:hover:before,
+.qtip:hover:after {
+  visibility: visible;
+  opacity: 1
+}
+/*top*/
+.qtip.tip-top:before {
+  top: 0;
+  left: 10%;
+  transform: translate(-50%, calc(-100% - 8px));
+  box-sizing: border-box;
+  border-radius: 3px;
+}
+.qtip.tip-top:after {
+  border-width: 8px 8px 0 8px;
+  border-color: rgba(10, 20, 30, 0.85) transparent transparent transparent;
+  top: -8px;
+  left: 10%;
+  transform: translate(-50%, 0);
+}
+
+/* end tooltip setup */
+
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  width: 60px;
+  height: 38px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 28px;
+  width: 28px;
+  left: 4px;
+  bottom: 5px;
+  background-color: rgb(209, 202, 202);
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #ebe4e1;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #ebe4e1;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(23px);
+  -ms-transform: translateX(23px);
+  transform: translateX(23px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-style: none;
+  border-radius: 34px;
+}
+
+
+.slider.round:before {
+  border-radius: 50%;
+  border-style: solid;
+  color: rgb(129, 129, 129);
+}

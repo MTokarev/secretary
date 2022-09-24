@@ -1,0 +1,58 @@
+﻿# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+build/
+bld/
+[Bb]in/
+[Oo]bj/
+msbuild.log
+msbuild.err
+msbuild.wrn
+
+# Visual Studio conf
+.vs/
+.cscode/
+
+# Migrations
+.Migrations/
+
+# Database
+app.db*
+
+# from Angular
+# See http://help.github.com/ignore-files/ for more about ignoring files.
+
+# Compiled output
+/dist
+/tmp
+/out-tsc
+/bazel-out
+
+# Node
+client/node_modules
+client/npm-debug.log
+client/yarn-error.log
+
+
+# Miscellaneous
+client/.angular/cache
+client/sass-cache/
+client/connect.lock
+client/coverage
+client/libpeerconnection.log
+client/testem.log
+client/typings
+
+# System files
+client/DS_Store
+client/Thumbs.db
+
+# ProjectRelated
+[Ll]ogs
+Migrations
+.DS_Store
+.DS_Store?

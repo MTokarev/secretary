@@ -1,0 +1,201 @@
+<div class="card"
+  style="background-color: grey; border-radius: 25px; background: linear-gradient(90deg, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%);">
+  <form *ngIf="this.showForm" [formGroup]="this.secretForm">
+    <div class="row">
+      <div class="col-md-1" style="margin-left: 3.5%;">
+        
+      </div>
+      <div class="col-md-9">
+        <div class="row margin-t-b-1">
+          <p style="color: white; margin: 3% 0% 3% 0%; font-size: 150%;">Create a new secret</p>
+          <div class="col-sm-6">
+            <label for="startDate">📅 Available from</label>
+            <input formControlName="startDate" name="startDate" type="datetime-local" class="form-control">
+            <label class="invalid-control">{{ (this.secretForm.controls['startDate'].touched &&
+              this.secretForm.controls['startDate'].invalid ? 'Start date must not be in the past': '') }}</label>
+          </div>
+          <div class="col-sm-6">
+            <label for="endDate">📅 Available until</label>
+            <input formControlName="endDate" type="datetime-local" class="form-control">
+            <label class="invalid-control">{{ (this.secretForm.controls['endDate'].touched &&
+              this.secretForm.controls['endDate'].invalid ? 'End date must be greater than start date': '') }}</label>
+          </div>
+        </div>
+        <div class="row margin-t-b-1">
+          <div class="col-md-12">
+            <textarea formControlName="requestText" class="form-control" placeholder="Secret body [by creating a secret, you give permission to the service to temporarily store encrypted secret until you delete it or until the secret expires]" 
+              rows="5"></textarea>
+            <label class="invalid-control">{{ (this.secretForm.controls['requestText'].touched &&
+              this.secretForm.controls['requestText'].invalid ? 'Please provide your secret': '') }}</label>
+          </div>
+        </div>
+        <div class="row margin-t-b-1">
+          <div class="col-3 col-lg-1">
+            <label class="switch">
+              <input type="checkbox" formControlName="selfRemovalAllowed">
+              <span class="slider round"></span>
+            </label>
+          </div>
+          <div class="col-9">
+            <p class="qtip tip-top"
+              data-tip="The recipient can delete the secret if this option is enabled"
+              style="user-select: none; position: relative; top: 13%;">Allow user to remove the secret<img
+                src="../../assets/img/question.png" style="width: 24px;"></p>
+          </div>
+        </div>
+        <div class="row margin-t-b-1">
+          <div class="col-3 col-lg-1">
+            <label class="switch">
+              <input type="checkbox" formControlName="accessCountRequired">
+              <span class="slider round"></span>
+            </label>
+          </div>
+          <div class="col-5">
+            <p *ngIf="!this.secretForm.controls['accessCountRequired'].value" class="qtip tip-top"
+              data-tip="Set how many times you want to access a secret before it is deleted"
+              style="user-select: none; position: relative; top: 13%;">Access count <img
+                src="../../assets/img/question.png" style="width: 24px;"></p>
+            <input *ngIf="this.secretForm.controls['accessCountRequired'].value" formControlName="accessCount"
+              type="number" class="form-control input-group-sm" placeholder="Access count" style="height: 40px;">
+          </div>
+        </div>
+        <div class="row margin-t-b-1">
+          <div class="col-3 col-lg-1">
+            <label class="switch">
+              <input type="checkbox" formControlName="accessKeyRequired">
+              <span class="slider round"></span>
+            </label>
+          </div>
+          <div class="col-5">
+            <p *ngIf="!this.secretForm.controls['accessKeyRequired'].value" class="qtip tip-top"
+              data-tip="Ask the user to provide a key to get the secret"
+              style="user-select: none; position: relative; top: 13%;">Additional key <img
+                src="../../assets/img/question.png" style="width: 24px;"></p>
+            <input *ngIf="this.secretForm.controls['accessKeyRequired'].value" formControlName="accessKey"
+              type="text" class="form-control" placeholder="Access key" style="-webkit-text-security: disc; height: 40px;">
+            <label class="invalid-control">{{ (this.secretForm.controls['accessKey'].touched &&
+              this.secretForm.controls['accessKey'].invalid ? 'Enter your access code': '') }}</label>
+          </div>
+        </div>
+
+        <div class="row margin-t-b-1" style="margin-bottom: 3%;">
+          <div class="col-md-3">
+            <button [disabled]="!this.secretForm.valid" (click)="this.onSubmit()"
+              class="btn-round btn-white">Create</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </form>
+</div>
+
+<div *ngIf="!this.showResult" class="row">
+  <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
+    <div class="card bg-c-blue order-card">
+      <div class="card-block">
+        <h6 class="m-b-20">🔑 Why secretary?</h6>
+        <hr>
+        <ul>
+          <li>
+            <p>The Secretary always encrypts your secret on the backend and never store access keys anywhere</p>
+          </li>
+          <li>
+            <p>Avoid sharing sensitive information via email or social networks</p>
+          </li>
+          <li>
+            <p>Get more control over the secret you share</p>
+          </li>
+          <li>
+            <p>Make the secret available at the specified time frame</p>
+          </li>
+          <li>
+            <p>Stay anonymous, we don't ask you to sign up or provide any identity</p>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
+    <div class="card bg-c-green order-card">
+      <div class="card-block">
+        <h6 class="m-b-20">🧭 What can you do?</h6>
+        <hr>
+        <ul>
+          <li>
+            <p>Create a secret</p>
+          </li>
+          <li>
+            <p>Set when your secret becomes active</p>
+          </li>
+          <li>
+            <p>Set when your secret will expire and be deleted</p>
+          </li>
+          <li>
+            <p>Add additional key to your secret and share with the receiver</p>
+          </li>
+          <li>
+            <p class="m-b-0">Delete secret manually, on exact date, or by number of access attempts</p>
+          </li>
+          <li>
+            <p>Allow recipient to remove secret</p>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
+    <div class="card bg-c-yellow order-card">
+      <div class="card-block">
+        <h6 class="m-b-20">📚 Read me</h6>
+        <hr>
+        <ul>
+          <li>
+            <p>To protect your secret from brut-force, we limit each IP address to access the site to 2 times every 5 seconds</p>
+          </li>
+          <li>
+            <p>You can deploy a local instance of this application in your org ❤️</p>
+          </li>
+          <li>
+            <p>Don't forget to copy secret and removal links</p>
+          </li>
+          <li>
+            <p>Create your custom logic with <a [href]="this.swaggerAddress">API</a> integration</p>
+          </li>
+          <li>
+            <p>More information available <a routerLink="/about" >here</a></p>
+          </li>
+          <li>
+            <p><a href="https://github.com/MTokarev/secretary/blob/main/README.md" >Source code</a></p>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div *ngIf="this.showResult" class="card">
+  <div class="card-body">
+    <h5 class="card-title">The secret has been created</h5>
+    <h6 class="card-subtitle mb-2 text-muted">Please make sure you copy the secret and removal links</h6>
+    <p class="card-text">
+      Link to the secret {{ (this.secretAddress + '?id=' + this.secretReturnDto.id) + (this.accessKeyEmpty ?
+      '&accessKey=' + this.secretReturnDto.accessPassword : '') }}
+      <a class="relative-centric" (click)="this.copyToClipboard(true)" style="cursor: pointer;"><img
+          src="{{this.secretLinkCopied ? '../../assets/img/done.png' : '../../assets/img/copy-to-clipboard.png' }}"
+          alt="Copy to the clipboard" title="{{this.secretLinkCopied ? 'Copied' : 'Copy to the clipboard' }}"
+          style="width: 23px;"></a>
+    </p>
+    <p class="card-text">
+      The <strong>removal</strong> link: {{ (this.secretAddress + '?removalKey=' + this.secretReturnDto.removalKey) }}
+      <a class="relative-centric" (click)="this.copyToClipboard(false)" style="cursor: pointer;"><img
+          src="{{this.removalLinkCopied ? '../../assets/img/done.png' : '../../assets/img/copy-to-clipboard.png' }}"
+          alt="Copy to the clipboard" title="{{this.removalLinkCopied ? 'Copied' : 'Copy to the clipboard' }}"
+          style="width: 24px;"></a>
+    </p>
+    <a (click)="this.createAnotherSecret()" class="card-link" style="cursor: pointer;">Create another secret</a>
+  </div>
+</div>

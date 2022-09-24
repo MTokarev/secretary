@@ -1,0 +1,12 @@
+{
+  "urls": {
+    "base": "http://localhost:4201/",
+    "secrets": "secrets/",
+    "swagger": "swagger/"
+  },
+  "siteConfig": {
+    "siteAddress": "http://localhost:4200",
+    "secret": "secret",
+    "retryHttpCallInSeconds": 5
+  }
+}
