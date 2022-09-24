@@ -16,6 +16,7 @@
     - [SSL](#ssl)
   - [Information for nerds 😎](#information-for-nerds-😎)
   - [Found a bug 🐞 ?](#found-a-bug-🐞-?)
+  - [Speak up 📣](#speak-up-📣)
   - [Rather than a thousand words (demo) 💻](#rather-than-a-thousand-words-demo-💻)
 
 
@@ -143,8 +144,12 @@ I am not a docker expert, but I might spend some time later on making parameters
 ## Found a bug 🐞 ?
 
 Please report it in github [**issues**](https://github.com/MTokarev/secretary/issues) section.
-  
- ## Rather than a thousand words (demo) 💻 
+
+## Speak up 📣
+
+Have an idea, or would like to discuss something? Please join our [discussions on github](https://github.com/MTokarev/secretary/discussions).
+
+## Rather than a thousand words (demo) 💻 
  
  ![demo](./docs/demo.gif)
 
