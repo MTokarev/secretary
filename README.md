@@ -67,8 +67,7 @@ And many other funny and sometimes not funny things.
 
 ## How can I access this service?
 
-Service is deployed in the public cloud and publicly accessible on [get-secret.com](https://get-
-secret.com) for free.
+Service is deployed in the public cloud and publicly accessible on [get-secret.com](https://get-secret.com) for free.
 
 ## Wait a minute, I don't trust you
 
