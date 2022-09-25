@@ -20,6 +20,14 @@ export class ConfigLoaderService {
       this.httpClient.get(configFile).subscribe({
         next: (response) => {
           ConfigLoaderService.config = <AppConfig>response;
+
+          if (environment.production) {
+            const baseUrl: string = window.location.origin + '/';
+            ConfigLoaderService.config.siteConfig.siteAddress = baseUrl;
+            ConfigLoaderService.config.urls.base = baseUrl;
+          }
+          
+          console.log(ConfigLoaderService.config.siteConfig.siteAddress);
           resolve();
         },
         error: (error: any) => {

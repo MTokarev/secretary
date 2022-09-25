@@ -89,38 +89,15 @@ If the service generates curiosity I will work on evolving it further.
 ## You promised to easy spin up a container
 
 ### Clone repo:
+
+*You can use your docker account, name and tag*
 ```
 git clone https://github.com/MTokarev/secretary.git
-```
-
-### Adjust your site address: 
-```
 cd secretary
-vi Dockerfile
-```
-      
-Replace site address.
-
-In this example to the http://localhost:8080.
-
-`RUN ./Set-Config.ps1 -siteFqdn "https://get-secret.com/" -configFilePath "config.prod.json"` 
-
-=>
-
-`RUN ./Set-Config.ps1 -siteFqdn "http://localhost:8080/" -configFilePath "config.prod.json"`
-
-### Build container
-*You can use any name and tag.* 
-
-```
 docker build -t mtokarevv/secretary1:latest . 
-```
-
-### Run container:
-
-```
 docker run -d -p 8080:8080 --rm mtokarevv/secretary1:latest
 ```
+
 ![docker run](./docs/dockerRun.png)
 
 If you want to put your database outside the container you can mount a volume and change the connection string inside `appsettings.json`.
