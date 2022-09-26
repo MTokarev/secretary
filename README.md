@@ -1,5 +1,5 @@
 # Table of contents
-- [Table of contents](#table-of-contents) 📰
+
 - [Secretary overview](#secretary-overview) 🔑
   - [Is it rocket science?](#is-it-rocket-science) 🚀
   - [What can I do with this service?](#what-can-i-do-with-this-service) ❓
