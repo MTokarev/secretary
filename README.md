@@ -1,23 +1,21 @@
 # Table of contents
-- [Secretary overview 🔑](#secretary-overview)
-  - [Is it rocket science 🚀](#is-it-rocket-science)
-  - [What can I do with this service ❓](#what-can-i-do-with-this-service)
-  - [What this service is about 👍🏼](#what-this-service-is-about)
-  - [What this service is NOT about ⛔️](#what-this-service-is-not-about)
-  - [How can I access this service 🕸](#how-can-i-access-this-service)
-  - [Wait a minute, I don't trust you 🤔](#wait-a-minute-i-dont-trust-you)
-  - [I don't care that this is open source, it doesn't guarantee your public version is secured 🙈](#i-dont-care-that-this-is-open-source-it-doesnt-guarantee-your-public-version-is-secured)
-  - [It is not ideal 🧐](#it-is-not-ideal)
-  - [You promised to easy spin up a container 🚚](#you-promised-to-easy-spin-up-a-container)
+
+- [Secretary overview](#secretary-overview) 🔑
+  - [Is it rocket science?](#is-it-rocket-science) 🚀
+  - [What can I do with this service?](#what-can-i-do-with-this-service) ❓
+  - [What this service is about?](#what-this-service-is-about) 👍🏼
+  - [What this service is NOT about?](#what-this-service-is-not-about) ⛔️
+  - [How can I access this service?](#how-can-i-access-this-service) 🚦
+  - [Wait a minute, I don't trust you](#wait-a-minute-i-dont-trust-you) 🧐
+  - [I don't care that this is open source, it doesn't guarantee your public version is secured](#i-dont-care-that-this-is-open-source-it-doesnt-guarantee-your-public-version-is-secured) 👮🏼‍♂️
+  - [It is not ideal](#it-is-not-ideal) 🌍
+  - [You promised to easy spin up a container](#you-promised-to-easy-spin-up-a-container) 🚚
     - [Clone repo:](#clone-repo)
-    - [Adjust your site address:](#adjust-your-site-address)
-    - [Build container:](#build-container)
-    - [Run container:](#run-container)
     - [SSL](#ssl)
-  - [Information for nerds 😎](#information-for-nerds)
-  - [Found a bug 🐞 ?](#found-a-bug)
-  - [Speak up 📣](#speak-up)
-  - [Rather than a thousand words (demo) 💻](#rather-than-a-thousand-words-demo)
+  - [Information for nerds](#information-for-nerds) 😎
+  - [Found a bug?](#found-a-bug) 🐞
+  - [Speak up](#speak-up) 📣
+  - [Rather than a thousand words (demo)](#rather-than-a-thousand-words-demo) 💿
 
 
 # Secretary overview 

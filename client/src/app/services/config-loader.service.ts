@@ -27,7 +27,6 @@ export class ConfigLoaderService {
             ConfigLoaderService.config.urls.base = baseUrl;
           }
           
-          console.log(ConfigLoaderService.config.siteConfig.siteAddress);
           resolve();
         },
         error: (error: any) => {
