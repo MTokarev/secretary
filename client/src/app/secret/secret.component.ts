@@ -60,6 +60,7 @@ export class SecretComponent implements OnInit {
 
         if (params.has('removalKey')) {
           this.removalKey = params.get('removalKey') ?? '';
+          
           this.secretService.deleteSecret(this.removalKey).subscribe({
             next: () => {
               this.secretShowDto = null;
@@ -111,8 +112,9 @@ export class SecretComponent implements OnInit {
         removalKey: this.secretShowDto?.removalKey
       },
       relativeTo: this.route
-      }
+    }
     );
+    this.secretShowDto = null;
   }
 
   copyToClipboard() {
