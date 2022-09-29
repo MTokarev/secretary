@@ -10,8 +10,8 @@
   - [I don't care that this is open source, it doesn't guarantee your public version is secured](#i-dont-care-that-this-is-open-source-it-doesnt-guarantee-your-public-version-is-secured) 👮🏼‍♂️
   - [It is not ideal](#it-is-not-ideal) 🌍
   - [You promised to easy spin up a container](#you-promised-to-easy-spin-up-a-container) 🚚
-    - [Clone repo:](#clone-repo)
     - [SSL](#ssl)
+    - [How encryption works](#how-encryption-works) 🔐
   - [Information for nerds](#information-for-nerds) 😎
   - [Found a bug?](#found-a-bug) 🐞
   - [Speak up](#speak-up) 📣
@@ -86,8 +86,6 @@ If the service generates curiosity I will work on evolving it further.
 
 ## You promised to easy spin up a container
 
-### Clone repo:
-
 *You can use your docker account, name and tag*
 ```
 git clone https://github.com/MTokarev/secretary.git
@@ -116,6 +114,13 @@ I am not a docker expert, but I might spend some time later on making parameters
 * Kestrel web server is used to serve both the front end and back end.
 * Swagger is used to simplify API integrations.
 * Throttling is enabled to protect service from robots and brute-force attacks. After 'x'  access attempts from the same IP, the request will be throttled with HTTP429 (Too many requests).
+
+### How encryption works
+
+**SHA256** is used as a hashing algorithm and **AES** for encryption.
+If a user creates an additional key for the secret, then the service uses it to create a symmetric key, otherwise, a random guid is generated for every secret that is later used as a symmetric key.
+
+The secretary doesn't store these keys anywhere. That means the attacker won't be able to decrypt secrets in case of service compromise unless symmetric keys are known.
 
 ## Found a bug?
 
