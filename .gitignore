@@ -57,3 +57,5 @@ client/Thumbs.db
 Migrations
 .DS_Store
 .DS_Store?
+.gitignore
+client/package-lock.jsongit 
