@@ -1,8 +1,5 @@
-﻿using System;
-using System.Linq.Expressions;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
+﻿using System.Linq.Expressions;
 using Microsoft.Extensions.Options;
-using Secretary.Data;
 using Secretary.DTOs;
 using Secretary.Enums;
 using Secretary.Interfaces;
@@ -11,7 +8,7 @@ using Secretary.Options;
 
 namespace Secretary.Services
 {
-    public class SecretService : ISecretService
+  public class SecretService : ISecretService
     {
         private readonly IGenericRepository<Secret> _repo;
         private readonly IEncryptionService _encryptionService;
@@ -108,7 +105,7 @@ namespace Secretary.Services
             }
 
             // Handle expired secrets.
-            // It should be separate background task which cleans up all expiried secrets on scheduled bases.
+            // It should be separate background task which cleans up all expired secrets on scheduled bases.
             if (DateTime.UtcNow > secret.AvailableUntilUtc)
             {
                 string msg = $"Access attempt to expired secret with id '{secret.Id}' detected. " +
@@ -174,7 +171,7 @@ namespace Secretary.Services
             return result;
         }
 
-        public async Task<Secret> ProccessAccessedSecretAsync(Secret secret)
+        public async Task<Secret> ProcessAccessedSecretAsync(Secret secret)
         {
             secret.AccessAttemptsLeft--;
 

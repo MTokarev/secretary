@@ -16,6 +16,7 @@ msbuild.wrn
 # Visual Studio conf
 .vs/
 .cscode/
+.vscode
 
 # Migrations
 .Migrations/

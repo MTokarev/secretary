@@ -5,14 +5,14 @@ using Secretary.Options;
 
 namespace Secretary.Services
 {
-    public class RemoveExpiriedSecretsJob : BackgroundService
+    public class RemoveExpiredSecretsJob : BackgroundService
     {
-        private readonly ILogger<RemoveExpiriedSecretsJob> _logger;
+        private readonly ILogger<RemoveExpiredSecretsJob> _logger;
         private readonly IServiceScopeFactory _serviceScopeFactory;
         private readonly SecretOptions _secretOptions;
         private readonly PeriodicTimer _periodicTimer;
 
-        public RemoveExpiriedSecretsJob(ILogger<RemoveExpiriedSecretsJob> logger,
+        public RemoveExpiredSecretsJob(ILogger<RemoveExpiredSecretsJob> logger,
             IServiceScopeFactory serviceScopeFactory,
             IOptions<SecretOptions> secretOptions)
         {
@@ -45,7 +45,7 @@ namespace Secretary.Services
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError($"Exception occured in '{nameof(RemoveExpiriedSecretsJob)}'. Message '{ex.Message}'. Exception: '{ex}'");
+                    _logger.LogError($"Exception occured in '{nameof(RemoveExpiredSecretsJob)}'. Message '{ex.Message}'. Exception: '{ex}'");
                 }
 
                 _logger.LogInformation($"Scavenging expired secrets cycle is complete. Next run is sceduled in '{_secretOptions.FindExpiriedSecretsInMinute}' minutes.");

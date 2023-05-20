@@ -16,7 +16,7 @@ using Serilog;
 var builder = WebApplication.CreateBuilder(args);
 
 #region builderConfig
-// Add Logging congif. Load from appdettings.json.
+// Add Logging configuration. Load from appsettings.json.
 builder.Host.UseSerilog((ctx, logger) =>
 {
     logger.ReadFrom.Configuration(ctx.Configuration);
@@ -45,7 +45,7 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 // Configure background job.
-builder.Services.AddHostedService<RemoveExpiriedSecretsJob>();
+builder.Services.AddHostedService<RemoveExpiredSecretsJob>();
 
 // Secret service setup.
 builder.Services.Configure<SecretOptions>(builder.Configuration.GetSection(nameof(SecretOptions)));
@@ -79,10 +79,10 @@ builder.Services.AddCors(options =>
 
 // Configure AppInsights telemetry, pass connection string to the env
 // more on https://learn.microsoft.com/en-us/azure/azure-monitor/app/asp-net-core?tabs=netcore6
-// if you don't provide connection string for appInsights then monitoring won't be enalbled
+// if you don't provide connection string for appInsights then monitoring won't be enabled
 builder.Services.AddApplicationInsightsTelemetry();
 
-// MVC is required for AppInsigths until MSFT fixes the bug
+// MVC is required for AppInsights until MSFT fixes the bug
 // more on https://github.com/Microsoft/ApplicationInsights-aspnetcore/issues/502
 builder.Services.AddMvc();
 
@@ -116,7 +116,7 @@ app.MapGet("/secrets/{id:guid}", async ([FromRoute]Guid id, [FromHeader]string? 
     var validatedResult = await secretService.ValidateSecretAsync(secretFromDb, accessPassword);
 
     if (validatedResult.ValidationResult == SecretValidationResult.SuccessfullyValidated)
-        await secretService.ProccessAccessedSecretAsync(secretFromDb);
+        await secretService.ProcessAccessedSecretAsync(secretFromDb);
 
     return validatedResult.GetResult();
     
@@ -127,8 +127,10 @@ app.MapGet("/secrets/{id:guid}", async ([FromRoute]Guid id, [FromHeader]string? 
 app.MapPost("/secrets", async ([FromBody] SecretDto secretDto, ISecretService secretService) =>
 {
     if (secretDto.AvailableFromUtc > secretDto.AvailableUntilUtc)
-        return Results.BadRequest("Expiration date must be greather than available from. " +
+        return Results.BadRequest("Expiration date must be greater than 'available from' date. " +
             $"Start date: '{secretDto.AvailableFromUtc}'. End date: '{secretDto.AvailableUntilUtc}'.");
+
+
 
     var result = await secretService.CreateSecretAsync(secretDto);
 

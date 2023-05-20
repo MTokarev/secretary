@@ -11,7 +11,7 @@ namespace Secretary.Interfaces
         Task<IEnumerable<Secret>> GetSecretsAsync(Expression<Func<Secret, bool>> expression);
         Task<Secret> GetSecretAsync(Expression<Func<Secret, bool>> expression);
         Task<ResultSecret> ValidateSecretAsync(Secret secret, string? accessPassword = null);
-        Task<Secret> ProccessAccessedSecretAsync(Secret secret);
+        Task<Secret> ProcessAccessedSecretAsync(Secret secret);
         Task<SecretDto> CreateSecretAsync(SecretDto secretDto);
         Task<Secret> RemoveSecretAsync(Guid removalKeyId);
         Task<Secret> RemoveSecretAsync(Secret secretToDelete);
