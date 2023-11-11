@@ -9,4 +9,12 @@ export class AppConfig {
     secret: '',
     retryHttpCallInSeconds: 0
   }
+  auth = {
+    facebook: {
+      clientId: ''
+    },
+    google: {
+      clientId: ''
+    }
+  }
 }

@@ -14,9 +14,43 @@ import { SecretComponent } from './secret/secret.component';
 
 import { ToastrModule } from 'ngx-toastr';
 import { AboutComponent } from './about/about.component';
+import {
+  FacebookLoginProvider,
+  GoogleLoginProvider,
+  GoogleSigninButtonModule,
+  SocialAuthServiceConfig
+} from "@abacritt/angularx-social-login";
 
 export function initializeApp(configLoader: ConfigLoaderService){
   return () => configLoader.load();
+}
+
+function initializeAuth(configLoader: ConfigLoaderService) {
+  const baseConfig: SocialAuthServiceConfig = {
+    autoLogin: false,
+    providers: [],
+    onError: (err) => {
+      console.error(err);
+    }
+  };
+
+  // Add Facebook if config exist
+  if (ConfigLoaderService.config.auth?.facebook?.clientId?.length > 0) {
+    baseConfig.providers.push({
+      id: FacebookLoginProvider.PROVIDER_ID,
+      provider: new FacebookLoginProvider(ConfigLoaderService.config.auth.facebook.clientId)
+    });
+  }
+
+  // Add google if config exist
+  if (ConfigLoaderService.config.auth?.google?.clientId?.length > 0) {
+    baseConfig.providers.push({
+      id: GoogleLoginProvider.PROVIDER_ID,
+      provider: new GoogleLoginProvider(ConfigLoaderService.config.auth.google.clientId)
+    });
+  }
+
+  return baseConfig;
 }
 
 @NgModule({
@@ -34,6 +68,7 @@ export function initializeApp(configLoader: ConfigLoaderService){
     FormsModule,
     ReactiveFormsModule,
     ToastrModule.forRoot(),
+    GoogleSigninButtonModule,
   ],
   providers: [
     ConfigLoaderService,
@@ -46,6 +81,11 @@ export function initializeApp(configLoader: ConfigLoaderService){
       useFactory: initializeApp,
       deps: [ConfigLoaderService],
       multi: true
+    },
+    {
+      provide: 'SocialAuthServiceConfig',
+      useFactory: initializeAuth,
+      deps: [ConfigLoaderService]
     }
   ],
   bootstrap: [AppComponent]

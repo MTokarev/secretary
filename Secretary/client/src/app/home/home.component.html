@@ -3,7 +3,7 @@
   <form *ngIf="this.showForm" [formGroup]="this.secretForm">
     <div class="row">
       <div class="col-md-1" style="margin-left: 3.5%;">
-        
+
       </div>
       <div class="col-md-9">
         <div class="row margin-t-b-1">
@@ -23,7 +23,7 @@
         </div>
         <div class="row margin-t-b-1">
           <div class="col-md-12">
-            <textarea formControlName="requestText" class="form-control" placeholder="Secret body [by creating a secret, you give permission to the service to temporarily store encrypted secret until you delete it or until the secret expires]" 
+            <textarea formControlName="requestText" class="form-control" placeholder="Secret body [by creating a secret, you give permission to the service to temporarily store encrypted secret until you delete it or until the secret expires]"
               rows="5"></textarea>
             <label class="invalid-control">{{ (this.secretForm.controls['requestText'].touched &&
               this.secretForm.controls['requestText'].invalid ? 'Please provide your secret': '') }}</label>
@@ -78,12 +78,24 @@
           </div>
         </div>
 
+        <!--Temporary section to play with Auth providers-->
         <div class="row margin-t-b-1" style="margin-bottom: 3%;">
+          <div *ngIf="isFacebookProviderEnabled" class="col-md-3">
+            <button (click)="this.login(AuthProviders.Facebook)"
+                    class="btn-round btn-white">Login with FB</button>
+          </div>
+          <div *ngIf="isGoogleProviderEnabled" class="col-md-3">
+            <asl-google-signin-button>Login</asl-google-signin-button>
+            <button (click)="this.login(AuthProviders.Google)"
+                    class="btn-round btn-white">Login with Google</button>
+          </div>
           <div class="col-md-3">
             <button [disabled]="!this.secretForm.valid" (click)="this.onSubmit()"
               class="btn-round btn-white">Create</button>
           </div>
         </div>
+        <!--End Section-->
+
       </div>
 
     </div>

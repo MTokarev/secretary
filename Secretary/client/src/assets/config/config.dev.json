@@ -8,5 +8,13 @@
     "siteAddress": "http://localhost:4200/",
     "secret": "secret",
     "retryHttpCallInSeconds": 5
+  },
+  "auth": {
+    "facebook": {
+      "clientId": ""
+    },
+    "google": {
+      "clientId": ""
+    }
   }
 }

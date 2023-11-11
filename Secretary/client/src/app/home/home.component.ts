@@ -1,14 +1,16 @@
-import { formatDate } from '@angular/common';
-import { Component, Inject, LOCALE_ID, OnDestroy, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { SecretCreateDto } from '../models/secret-create-dto.model';
-import { SecretReturnDto } from '../models/secret-return-dto.model';
-import { ConfigLoaderService } from '../services/config-loader.service';
-import { SecretService } from '../services/secret.service';
+import {formatDate} from '@angular/common';
+import {Component, Inject, LOCALE_ID, OnDestroy, OnInit} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {SecretCreateDto} from '../models/secret-create-dto.model';
+import {SecretReturnDto} from '../models/secret-return-dto.model';
+import {ConfigLoaderService} from '../services/config-loader.service';
+import {SecretService} from '../services/secret.service';
 import {Clipboard} from '@angular/cdk/clipboard';
-import { dateNotInThePast, firstDateMustBeGreaterThanSecond } from '../utils/validators/date.validator';
-import { Subscription } from 'rxjs';
-import { ToastrService } from 'ngx-toastr';
+import {dateNotInThePast, firstDateMustBeGreaterThanSecond} from '../utils/validators/date.validator';
+import {Subscription} from 'rxjs';
+import {ToastrService} from 'ngx-toastr';
+import {FacebookLoginProvider, GoogleLoginProvider, SocialAuthService} from "@abacritt/angularx-social-login";
+import {AuthProviders} from "../enums/auth-providers.enum";
 
 @Component({
   selector: 'app-home',
@@ -29,12 +31,16 @@ export class HomeComponent implements OnInit, OnDestroy {
   showResult: boolean = false;
   secretLinkCopied: boolean = false;
   removalLinkCopied: boolean = false;
+  isGoogleProviderEnabled: boolean = ConfigLoaderService.config.auth?.google?.clientId?.length > 0;
+  isFacebookProviderEnabled: boolean = ConfigLoaderService.config.auth?.facebook?.clientId?.length > 0;
 
   constructor(@Inject(LOCALE_ID) public locale: string,
     private secretService: SecretService,
     private toastr: ToastrService,
-    private clipboard: Clipboard) { }
-  
+    private clipboard: Clipboard,
+    private authService: SocialAuthService) {
+  }
+
   ngOnDestroy(): void {
     this.secretFormStartDateSub.unsubscribe();
     this.secretFormKeyRequiredSub.unsubscribe();
@@ -98,6 +104,19 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.initSecretForm();
   }
 
+  login (provider: AuthProviders) {
+    switch (provider){
+      case AuthProviders.Facebook:
+        this.authService.signIn(FacebookLoginProvider.PROVIDER_ID);
+        break;
+      case AuthProviders.Google:
+        console.log("google")
+        this.authService.signIn(GoogleLoginProvider.PROVIDER_ID);
+        break;
+      default:
+        break;
+    }
+  }
   createAnotherSecret() {
     this.showResult = false;
     this.showForm = true;
@@ -110,7 +129,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   initSecretForm() {
     const now = new Date();
-    
+
     this.secretForm.reset();
 
     this.secretForm.patchValue({'startDate': formatDate(now, 'yyyy-MM-ddTHH:mm', this.locale)});
@@ -164,4 +183,5 @@ export class HomeComponent implements OnInit, OnDestroy {
     return !this.secretForm.controls['accessKeyRequired'].value || this.secretForm.controls['accessKey'].value?.length === 0;
   }
 
+  protected readonly AuthProviders = AuthProviders;
 }
