@@ -48,10 +48,10 @@ You need to provide configuration for providers that the project supports. Prima
 
 Supported providers:
 
-Microsoft
-Google
-Facebook
-Configuration examples =>
+- Microsoft
+- Google
+- Facebook
+- Configuration examples =>
 
 Front-End (`config-prd.json`):
 ```json
