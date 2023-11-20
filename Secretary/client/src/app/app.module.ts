@@ -17,15 +17,19 @@ import { AboutComponent } from './about/about.component';
 import {
   FacebookLoginProvider,
   GoogleLoginProvider,
-  GoogleSigninButtonModule,
+  GoogleSigninButtonModule, MicrosoftLoginProvider, SocialAuthService,
   SocialAuthServiceConfig
 } from "@abacritt/angularx-social-login";
+import {MySecretsComponent} from "./my-secrets/my-secrets.component";
+import {ConvertUtcToLocal} from "./utils/pipes/convert-utc-to-local";
+import {UserService} from "./services/user.service";
+import {AuthProviders} from "./enums/auth-providers.enum";
 
 export function initializeApp(configLoader: ConfigLoaderService){
   return () => configLoader.load();
 }
 
-function initializeAuth(configLoader: ConfigLoaderService) {
+export function initializeAuth(configLoader: ConfigLoaderService) {
   const baseConfig: SocialAuthServiceConfig = {
     autoLogin: false,
     providers: [],
@@ -38,15 +42,26 @@ function initializeAuth(configLoader: ConfigLoaderService) {
   if (ConfigLoaderService.config.auth?.facebook?.clientId?.length > 0) {
     baseConfig.providers.push({
       id: FacebookLoginProvider.PROVIDER_ID,
-      provider: new FacebookLoginProvider(ConfigLoaderService.config.auth.facebook.clientId)
+      provider: new FacebookLoginProvider(ConfigLoaderService.config.auth.facebook.clientId),
     });
   }
 
-  // Add google if config exist
+  // Add Google if config exist
   if (ConfigLoaderService.config.auth?.google?.clientId?.length > 0) {
     baseConfig.providers.push({
       id: GoogleLoginProvider.PROVIDER_ID,
-      provider: new GoogleLoginProvider(ConfigLoaderService.config.auth.google.clientId)
+      provider: new GoogleLoginProvider(ConfigLoaderService.config.auth.google.clientId, {
+        // This will stop asking user to login with popup prompt
+        oneTapEnabled: false
+      }),
+    });
+  }
+
+  // Add Microsoft if config exist
+  if (ConfigLoaderService.config.auth?.microsoft?.clientId?.length > 0) {
+    baseConfig.providers.push({
+      id: MicrosoftLoginProvider.PROVIDER_ID,
+      provider: new MicrosoftLoginProvider(ConfigLoaderService.config.auth.microsoft.clientId)
     });
   }
 
@@ -59,6 +74,8 @@ function initializeAuth(configLoader: ConfigLoaderService) {
     HomeComponent,
     SecretComponent,
     AboutComponent,
+    ConvertUtcToLocal,
+    MySecretsComponent
   ],
   imports: [
     BrowserModule,
@@ -86,7 +103,7 @@ function initializeAuth(configLoader: ConfigLoaderService) {
       provide: 'SocialAuthServiceConfig',
       useFactory: initializeAuth,
       deps: [ConfigLoaderService]
-    }
+    },
   ],
   bootstrap: [AppComponent]
 })

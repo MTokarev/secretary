@@ -19,7 +19,15 @@ namespace Secretary.Data
             => await _context
                 .Set<T>()
                 .ToListAsync();
-
+    
+        public async Task<IEnumerable<T>> GetAsync<TKey>(Expression<Func<T, bool>> expression, Expression<Func<T, TKey>> orderBy, int take, int skip)
+            => await _context
+                .Set<T>()
+                .Where(expression)
+                .OrderByDescending(orderBy)
+                .Skip(skip)
+                .Take(take)
+                .ToListAsync();
         public ValueTask<T> GetAsync(Guid id)
             => _context
                 .Set<T>()
@@ -36,6 +44,13 @@ namespace Secretary.Data
 
         public T Update(T entity)
             => _context.Update(entity).Entity;
+
+        public async Task<int> GetCount(Expression<Func<T, bool>> expression)
+        {
+            return await _context
+                .Set<T>()
+                .CountAsync(expression);
+        }
 
         public async Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> expression)
             => await _context.Set<T>()

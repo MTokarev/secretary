@@ -9,21 +9,16 @@ namespace Secretary.Extensions
     {
         public static IResult GetResult(this ResultSecret result)
         {
-            switch (result.ValidationResult)
+            return result.ValidationResult switch
             {
-                case SecretValidationResult.SuccessfullyValidated:
-                    return Results.Ok(result);
-                case SecretValidationResult.PasswordIncorrect:
-                case SecretValidationResult.PasswordRequired:
-                    return Results.BadRequest(result);
-                case SecretValidationResult.NotFound:
-                case SecretValidationResult.EarlyToShow:
-                    return Results.NotFound(result);
-                case SecretValidationResult.Expired:
-                    return Results.BadRequest(result);
-                default:
-                    return Results.Problem();
-            }
+                SecretValidationResult.SuccessfullyValidated => Results.Ok(result),
+                SecretValidationResult.PasswordIncorrect => Results.BadRequest(result),
+                SecretValidationResult.PasswordRequired => Results.BadRequest(result),
+                SecretValidationResult.NotFound => Results.NotFound(result),
+                SecretValidationResult.EarlyToShow => Results.NotFound(result),
+                SecretValidationResult.Expired => Results.BadRequest(result),
+                _ => Results.Problem()
+            };
         }
     }
 }

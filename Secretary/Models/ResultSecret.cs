@@ -8,7 +8,7 @@ namespace Secretary.Models
     {
         public SecretValidationResult ValidationResult { get; set; }
         public string Message { get; set; }
-        public SecretDto SecretDto { get; set; }
+        public SecretExtendedDto SecretExtendedDto { get; set; }
     }
 }
 

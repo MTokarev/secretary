@@ -18,7 +18,7 @@ namespace Secretary.Services
         {
             _serviceScopeFactory = serviceScopeFactory;
             _secretOptions = secretOptions.Value;
-            _periodicTimer = new(TimeSpan.FromMinutes(_secretOptions.FindExpiriedSecretsInMinute));
+            _periodicTimer = new(TimeSpan.FromMinutes(_secretOptions.FindExpiredSecretsInMinute));
             _logger = logger;
         }
 
@@ -48,7 +48,7 @@ namespace Secretary.Services
                     _logger.LogError($"Exception occured in '{nameof(RemoveExpiredSecretsJob)}'. Message '{ex.Message}'. Exception: '{ex}'");
                 }
 
-                _logger.LogInformation($"Scavenging expired secrets cycle is complete. Next run is sceduled in '{_secretOptions.FindExpiriedSecretsInMinute}' minutes.");
+                _logger.LogInformation($"Scavenging expired secrets cycle is complete. Next run is scheduled in '{_secretOptions.FindExpiredSecretsInMinute}' minutes.");
             }
 
         }

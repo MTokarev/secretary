@@ -9,6 +9,7 @@ import { SecretService } from '../services/secret.service';
 import { ToastrService } from 'ngx-toastr';
 import { ConfigLoaderService } from '../services/config-loader.service';
 import { Clipboard } from '@angular/cdk/clipboard';
+import {CommonConstants} from "../constants/common-constants";
 
 @Component({
   selector: 'app-get-secret',
@@ -45,7 +46,7 @@ export class SecretComponent implements OnInit {
           this.accessKey = params.get('accessKey') ?? '';
           this.secretService.getSecret(this.secretId, this.accessKey).subscribe({
             next: (result: ResultSecret) => {
-              this.secretShowDto = result.secretDto
+              this.secretShowDto = result.secretExtendedDto
             },
             error: (error: any) => {
               if (error.error.validationResult === this.resultTypes.PasswordRequired) {
@@ -60,7 +61,7 @@ export class SecretComponent implements OnInit {
 
         if (params.has('removalKey')) {
           this.removalKey = params.get('removalKey') ?? '';
-          
+
           this.secretService.deleteSecret(this.removalKey).subscribe({
             next: () => {
               this.secretShowDto = null;
@@ -80,7 +81,7 @@ export class SecretComponent implements OnInit {
     this.secretShowDto = new SecretShowDto();
     this.secretService.getSecret(this.secretId, this.accessKey).subscribe({
       next: (result: ResultSecret) => {
-        this.secretShowDto = result.secretDto;
+        this.secretShowDto = result.secretExtendedDto;
         this.keyRetrieved = true;
       },
       error: (error: any) => {
@@ -107,7 +108,7 @@ export class SecretComponent implements OnInit {
   }
 
   deleteSecret() {
-    this.router.navigate(['/secret'], { 
+    this.router.navigate(['/secret'], {
       queryParams: {
         removalKey: this.secretShowDto?.removalKey
       },
@@ -120,6 +121,9 @@ export class SecretComponent implements OnInit {
   copyToClipboard() {
     this.clipboard.copy(this.secretShowDto?.body ?? "");
     this.secretCopied = true;
-  }
 
+    setTimeout(() => {
+      this.secretCopied = false;
+    }, CommonConstants.changeHtmlImageBackInMilliseconds);
+  }
 }

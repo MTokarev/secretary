@@ -17,16 +17,15 @@ export class ConfigLoaderService {
    load() {
     const configFile = `assets/config/config.${environment.name}.json`;
     return new Promise<void>((resolve, reject) => {
-      this.httpClient.get(configFile).subscribe({
+      this.httpClient.get<AppConfig>(configFile).subscribe({
         next: (response) => {
-          ConfigLoaderService.config = <AppConfig>response;
+          ConfigLoaderService.config = response;
 
           if (environment.production) {
             const baseUrl: string = window.location.origin + '/';
             ConfigLoaderService.config.siteConfig.siteAddress = baseUrl;
             ConfigLoaderService.config.urls.base = baseUrl;
           }
-          
           resolve();
         },
         error: (error: any) => {

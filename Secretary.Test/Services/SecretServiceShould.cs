@@ -1,15 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
-using System.Reflection.Metadata;
-using Castle.Core.Logging;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query;
-using Microsoft.EntityFrameworkCore.Query.Internal;
-using Microsoft.Extensions.Logging.Abstractions;
+﻿using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Moq;
-using Secretary.Data;
 using Secretary.DTOs;
 using Secretary.Enums;
 using Secretary.Interfaces;
@@ -26,7 +17,7 @@ namespace Secretary.Test.Services
         private readonly SecretService _secretService;
         private readonly Mock<IEncryptionService> _encryptionService;
         IEnumerable<Secret> _secrets;
-        IEnumerable<SecretDto> _secretsDto;
+        IEnumerable<SecretExtendedDto> _secretsDto;
 
         public SecretServiceShould()
         {
@@ -78,7 +69,7 @@ namespace Secretary.Test.Services
                 secret2
             }.AsQueryable();
 
-            _secretsDto = _secrets.Select(s => SecretDto.CreateFromSecret(s))
+            _secretsDto = _secrets.Select(SecretExtendedDto.CreateFromSecret)
                 .ToList();
 
             _repo.Setup(x => x.FindAsync(x => x.Id == _secrets.First().Id))
@@ -144,7 +135,7 @@ namespace Secretary.Test.Services
 
             // assert
             Assert.Equal(result.ValidationResult, SecretValidationResult.PasswordRequired);
-            Assert.Null(result.SecretDto);
+            Assert.Null(result.SecretExtendedDto);
         }
 
         [Fact]
@@ -158,22 +149,22 @@ namespace Secretary.Test.Services
 
             // assert
             Assert.Equal(result.ValidationResult, SecretValidationResult.PasswordIncorrect);
-            Assert.Null(result.SecretDto);
+            Assert.Null(result.SecretExtendedDto);
         }
 
 
         [Fact]
-        public async Task Substract_AccessCount_Each_Time_Secret_Gets_Accessed()
+        public async Task Subtract_AccessCount_Each_Time_Secret_Gets_Accessed()
         {
             // arrange
             var secret = _secrets.First();
-            int initiallyAccessAtemptLeft = secret.AccessAttemptsLeft;
+            int initiallyAccessAttemptLeft = secret.AccessAttemptsLeft;
 
             // act
             var result = await _secretService.ProcessAccessedSecretAsync(secret);
 
             // assert
-            Assert.True(initiallyAccessAtemptLeft > result.AccessAttemptsLeft);
+            Assert.True(initiallyAccessAttemptLeft > result.AccessAttemptsLeft);
         }
     }
 }

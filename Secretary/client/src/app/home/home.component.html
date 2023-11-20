@@ -1,32 +1,34 @@
-<div class="card"
-  style="background-color: grey; border-radius: 25px; background: linear-gradient(90deg, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%);">
-  <form *ngIf="this.showForm" [formGroup]="this.secretForm">
+<div class="card" tabindex="0"
+  style="background-color: grey; border-radius: 25px; background: linear-gradient(90deg, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%);"
+     (keydown)="handleSubmitFormByKeyboard($event)">
+  <form *ngIf="this.showForm"
+        [formGroup]="this.secretForm"
+        (ngSubmit)="onSubmit()">
     <div class="row">
       <div class="col-md-1" style="margin-left: 3.5%;">
-
       </div>
       <div class="col-md-9">
         <div class="row margin-t-b-1">
           <p style="color: white; margin: 3% 0% 3% 0%; font-size: 150%;">Create a new secret</p>
           <div class="col-sm-6">
             <label for="startDate">📅 Available from</label>
-            <input formControlName="startDate" name="startDate" type="datetime-local" class="form-control">
+            <input id="startDate" formControlName="startDate" name="startDate" type="datetime-local" class="form-control">
             <label class="invalid-control">{{ (this.secretForm.controls['startDate'].touched &&
               this.secretForm.controls['startDate'].invalid ? 'Start date must not be in the past': '') }}</label>
           </div>
           <div class="col-sm-6">
             <label for="endDate">📅 Available until</label>
-            <input formControlName="endDate" type="datetime-local" class="form-control">
+            <input id="endDate" formControlName="endDate" type="datetime-local" class="form-control">
             <label class="invalid-control">{{ (this.secretForm.controls['endDate'].touched &&
               this.secretForm.controls['endDate'].invalid ? 'End date must be greater than start date': '') }}</label>
           </div>
         </div>
         <div class="row margin-t-b-1">
           <div class="col-md-12">
-            <textarea formControlName="requestText" class="form-control" placeholder="Secret body [by creating a secret, you give permission to the service to temporarily store encrypted secret until you delete it or until the secret expires]"
+            <textarea id="secretBody" formControlName="requestText" class="form-control" placeholder="Secret body. You can press CTRL+Enter to create a secret.
+[by creating a secret, you give permission to the service to temporarily store encrypted secret until you delete it or until the secret expires]"
               rows="5"></textarea>
-            <label class="invalid-control">{{ (this.secretForm.controls['requestText'].touched &&
-              this.secretForm.controls['requestText'].invalid ? 'Please provide your secret': '') }}</label>
+            <label class="invalid-control">{{ isSecretBodyInvalid ? 'Please provide your secret': '' }}</label>
           </div>
         </div>
         <div class="row margin-t-b-1">
@@ -77,27 +79,43 @@
               this.secretForm.controls['accessKey'].invalid ? 'Enter your access code': '') }}</label>
           </div>
         </div>
-
-        <!--Temporary section to play with Auth providers-->
         <div class="row margin-t-b-1" style="margin-bottom: 3%;">
-          <div *ngIf="isFacebookProviderEnabled" class="col-md-3">
-            <button (click)="this.login(AuthProviders.Facebook)"
-                    class="btn-round btn-white">Login with FB</button>
+          <div *ngIf="isFacebookProviderEnabled || isMicrosoftProviderEnabled || isGoogleProviderEnabled" class="dropdown" style="margin-top: 5px;">
+            <button type="button" *ngIf="this.user != undefined" class="btn-round btn-white" (click)="this.logOut()">Logout</button>
+            <button type="button" *ngIf="this.user === undefined || this.user === null"
+                    class="btn-round btn-white" (click)="this.toggleDropdown()">Login
+            </button>
+
+            <div class="dropdown-content" [ngClass]="{ 'show': isDropdownOpen }">
+              <button *ngIf="isFacebookProviderEnabled"
+                      class="login-button"
+                      style="margin-top: 5px;"
+                      type="button"
+                      (click)="this.login(FacebookLoginProvider.PROVIDER_ID)">
+                with Facebook
+              </button>
+              <button *ngIf="isMicrosoftProviderEnabled"
+                      class="login-button"
+                      style="margin-top: 5px;"
+                      type="button"
+                      (click)="this.login(MicrosoftLoginProvider.PROVIDER_ID)">
+                with Microsoft
+              </button>
+              <asl-google-signin-button *ngIf="isGoogleProviderEnabled" type="standard" shape="circle" size="large"></asl-google-signin-button>
+            </div>
           </div>
-          <div *ngIf="isGoogleProviderEnabled" class="col-md-3">
-            <asl-google-signin-button>Login</asl-google-signin-button>
-            <button (click)="this.login(AuthProviders.Google)"
-                    class="btn-round btn-white">Login with Google</button>
+          <div>
+            <button *ngIf="this.user != undefined" class="btn-round btn-white" type="button" style="margin-top: 5px;" routerLink="my-secrets">Show me my secrets</button>
           </div>
-          <div class="col-md-3">
-            <button [disabled]="!this.secretForm.valid" (click)="this.onSubmit()"
+
+          <div class="col-md-3" style="margin-top: 5px;">
+            <button [disabled]="!this.secretForm.valid" type="submit"
               class="btn-round btn-white">Create</button>
           </div>
         </div>
         <!--End Section-->
 
       </div>
-
     </div>
   </form>
 </div>

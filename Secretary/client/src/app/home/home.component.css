@@ -96,3 +96,78 @@ textarea {
 a {
   text-decoration: none;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+/* Basic dropdown button styling */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  min-width: 160px;
+  z-index: 1;
+  animation: dropDown 0.3s ease-out;
+}
+
+@keyframes dropDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dropdown-content.hide {
+  animation: fadeOut 0.3s ease-out;
+  display: none; /* Hide the content after the animation completes */
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/*.dropdown-content a:hover {*/
+/*  background-color: #f1f1f1;*/
+/*}*/
+
+.show {
+  display: block;
+}
+
+
+.login-button {
+  background-color: #f9f9f9;
+  padding: 6px;
+  text-align: center;
+  text-decoration: none;
+  display: block;
+  cursor: pointer;
+  height: 40px;
+  border-radius: 25px;
+  border: none;
+  /*margin-top: 5px;*/
+  margin-bottom: 5px;
+  width: 100%; /* Make the buttons take the full width of the dropdown */
+}

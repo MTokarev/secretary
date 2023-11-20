@@ -12,6 +12,8 @@ namespace Secretary.Models
         [Required]
         [StringLength(4096)]
         public string Body { get; set; }
+        
+        public string? SharedByEmail { get; set; }
 
         public int AccessAttemptsLeft { get; set; }
 
@@ -26,18 +28,21 @@ namespace Secretary.Models
         public DateTime CreatedOnUtc { get; set; }
 
         public RemovalKey RemovalKey { get; set; }
+        
+        public DecryptionKey DecryptionKey { get; set; }
 
-        public static Secret CreateFromDto(SecretDto secretDto)
+        public static Secret CreateFromDto(SecretExtendedDto secretExtendedDto)
         {
             var secret = new Secret
             {
-                Body = secretDto.Body,
+                Body = secretExtendedDto.Body,
                 Id = Guid.NewGuid(),
                 CreatedOnUtc = DateTime.UtcNow,
-                SelfRemovalAllowed = secretDto.SelfRemovalAllowed,
-                AccessAttemptsLeft = secretDto.AccessAttemptsLeft,
-                AvailableFromUtc = secretDto.AvailableFromUtc,
-                AvailableUntilUtc = secretDto.AvailableUntilUtc
+                SelfRemovalAllowed = secretExtendedDto.SelfRemovalAllowed,
+                AccessAttemptsLeft = secretExtendedDto.AccessAttemptsLeft,
+                AvailableFromUtc = secretExtendedDto.AvailableFromUtc,
+                AvailableUntilUtc = secretExtendedDto.AvailableUntilUtc,
+                SharedByEmail = secretExtendedDto.SharedByEmail?.ToLower()
             };
 
             secret.RemovalKey = new RemovalKey
@@ -46,7 +51,7 @@ namespace Secretary.Models
                 SecretId = secret.Id,
                 Secret = secret
             };
-
+            
             return secret;
         }
 

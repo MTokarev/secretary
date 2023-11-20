@@ -9,7 +9,9 @@ using Secretary.Options;
 namespace Secretary.Services
 {
   public class SecretService : ISecretService
-    {
+  {
+        private const int MaxPageSize = 20;
+        
         private readonly IGenericRepository<Secret> _repo;
         private readonly IEncryptionService _encryptionService;
         private readonly SecretOptions _secretOptions;
@@ -26,6 +28,46 @@ namespace Secretary.Services
             _logger = logger;
         }
 
+        public async Task<PaginatedResponse<SecretDto>> GetSecretsAsync(
+            Expression<Func<Secret, bool>> expression, 
+            int page,
+            int pageSize = 10)
+        {
+            var totalItems = await _repo.GetCount(expression);
+            var paginatedResponse = new PaginatedResponse<SecretDto>
+            {
+                Page = page == 0 
+                    ? 1
+                    : page,
+                TotalItems = totalItems
+            };
+            
+            // TODO: We need to return a result where the client can get the reason of seeing an empty result
+            // why empty result is returned.
+            if (totalItems == 0 
+                || page > paginatedResponse.TotalPages)
+            {
+                paginatedResponse.Data = Enumerable.Empty<SecretDto>();
+                return paginatedResponse;
+            }
+            
+            // Use max page size if client has requested a bigger page
+            paginatedResponse.PageSize = pageSize > MaxPageSize
+                ? MaxPageSize
+                : pageSize;
+            
+            var skipItems = page == 1 
+                ? 0 
+                : paginatedResponse.PageSize * (page - 1);
+            var secrets = await _repo.GetAsync(expression, 
+                (s) => s.CreatedOnUtc 
+                , pageSize, 
+                skipItems);
+            paginatedResponse.Data = secrets.Select(SecretDto.CreateFromSecret);
+
+            return paginatedResponse;
+        }
+
         public async Task<IEnumerable<Secret>> GetSecretsAsync(Expression<Func<Secret, bool>> expression)
         {
             var result = await _repo.FindAsync(expression);
@@ -39,25 +81,36 @@ namespace Secretary.Services
             return result.FirstOrDefault();
         }
 
-        public async Task<SecretDto> CreateSecretAsync(SecretDto secretDto)
+        public async Task<SecretExtendedDto> CreateSecretAsync(SecretExtendedDto secretExtendedDto)
         {
-            secretDto.AccessAttemptsLeft = secretDto.AccessAttemptsLeft == 0 ?
+            secretExtendedDto.AccessAttemptsLeft = secretExtendedDto.AccessAttemptsLeft == 0 ?
                 _secretOptions.DefaultAccessAttempts :
-                secretDto.AccessAttemptsLeft;
+                secretExtendedDto.AccessAttemptsLeft;
 
             // If user not set the password, then generate a 'random' guid and use it to encrypt the body
-            string key = secretDto.HasAccessPassword ? secretDto.AccessPassword : Guid.NewGuid().ToString();
+            string key = secretExtendedDto.HasAccessPassword ? secretExtendedDto.AccessPassword : Guid.NewGuid().ToString();
 
-            secretDto.Body = await _encryptionService.EncryptAsync(key, secretDto.Body);
-
-            var secretToCreate = Secret.CreateFromDto(secretDto);
-
+            secretExtendedDto.Body = await _encryptionService.EncryptAsync(key, secretExtendedDto.Body);
+            
+            var secretToCreate = Secret.CreateFromDto(secretExtendedDto);
+            
+            if (secretExtendedDto is { SharedByEmail: not null, HasAccessPassword: false } )
+            {
+                secretToCreate.DecryptionKey = new DecryptionKey
+                {
+                    Id = Guid.NewGuid(),
+                    Key = key,
+                    SecretId = secretToCreate.Id,
+                    Secret = secretToCreate
+                };
+            }
+            
             var result = await _repo.CreateAsync(secretToCreate);
             int rowsAffected = await _repo.SaveChangesAsync();
 
             _logger.LogInformation($"New secret has been added to the database: '{rowsAffected}' row(s) affected.");
 
-            var secretDtoToReturn = SecretDto.CreateFromSecret(result);
+            var secretDtoToReturn = SecretExtendedDto.CreateFromSecret(result);
             secretDtoToReturn.AccessPassword = key;
             
             return secretDtoToReturn;
@@ -143,7 +196,7 @@ namespace Secretary.Services
                 return result;
             }
 
-            var secretToReturn = SecretDto.CreateFromSecret(secret);
+            var secretToReturn = SecretExtendedDto.CreateFromSecret(secret);
 
             // If self removal is not allowed then remove removalKey from DTO
             if (!secret.SelfRemovalAllowed)
@@ -166,7 +219,7 @@ namespace Secretary.Services
 
             result.ValidationResult = SecretValidationResult.SuccessfullyValidated;
             result.Message = $"Secret with is '{secret.Id}' has been validated.";
-            result.SecretDto = secretToReturn;
+            result.SecretExtendedDto = secretToReturn;
 
             return result;
         }

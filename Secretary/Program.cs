@@ -1,16 +1,14 @@
 using System.Reflection;
 using AspNetCoreRateLimit;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using Secretary.ApiEndpoints;
 using Secretary.Data;
-using Secretary.DTOs;
-using Secretary.Enums;
-using Secretary.Extensions;
 using Secretary.Interfaces;
 using Secretary.Models;
 using Secretary.Options;
 using Secretary.Services;
+using Secretary.Validators;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -50,6 +48,16 @@ builder.Services.AddHostedService<RemoveExpiredSecretsJob>();
 // Secret service setup.
 builder.Services.Configure<SecretOptions>(builder.Configuration.GetSection(nameof(SecretOptions)));
 builder.Services.AddScoped<IGenericRepository<Secret>, GenericRepository<Secret>>();
+
+builder.Services.AddHttpClient();
+
+// Validators setup.
+// Memory cache is required to work properly, make sure you register it as a DI.
+builder.Services.Configure<AuthOptions>(builder.Configuration.GetSection(nameof(AuthOptions)));
+builder.Services.AddScoped<ITokenHandler, FacebookTokenHandler>();
+builder.Services.AddScoped<ITokenHandler, GoogleTokenHandler>();
+builder.Services.AddScoped<ITokenHandler, MicrosoftTokenHandler>();
+builder.Services.AddScoped<ITokenService, TokenService>();
 
 // Encryption service config.
 builder.Services.AddScoped<IEncryptionService, EncryptionService>();
@@ -105,48 +113,9 @@ app.UseHttpsRedirection();
 // Configure fallback to the index.html to allow Angular handle the routing.
 app.MapFallbackToFile(Path.Combine(builder.Environment.ContentRootPath, "release", "wwwroot", "/index.html"));
 app.UseStaticFiles();
-#endregion
 
-#region endpoints
-
-app.MapGet("/secrets/{id:guid}", async ([FromRoute]Guid id, [FromHeader]string? accessPassword, ISecretService secretService) =>
-{
-    var secretFromDb = await secretService.GetSecretAsync(s => s.Id == id);
-
-    var validatedResult = await secretService.ValidateSecretAsync(secretFromDb, accessPassword);
-
-    if (validatedResult.ValidationResult == SecretValidationResult.SuccessfullyValidated)
-        await secretService.ProcessAccessedSecretAsync(secretFromDb);
-
-    return validatedResult.GetResult();
-    
-}).Produces<SecretDto>(StatusCodes.Status200OK)
-  .Produces(StatusCodes.Status404NotFound)
-  .WithName("GetSecret");
-
-app.MapPost("/secrets", async ([FromBody] SecretDto secretDto, ISecretService secretService) =>
-{
-    if (secretDto.AvailableFromUtc > secretDto.AvailableUntilUtc)
-        return Results.BadRequest("Expiration date must be greater than 'available from' date. " +
-            $"Start date: '{secretDto.AvailableFromUtc}'. End date: '{secretDto.AvailableUntilUtc}'.");
-
-
-
-    var result = await secretService.CreateSecretAsync(secretDto);
-
-    return Results.CreatedAtRoute("GetSecret", new { id = result.Id }, result);
-}).Produces<SecretDto>(StatusCodes.Status201Created);
-
-app.MapDelete("/secrets/{removalKeyId:guid}", async ([FromRoute] Guid removalKeyId,  ISecretService secretService) =>
-{
-    var secretToDelete = await secretService.RemoveSecretAsync(removalKeyId);
-
-    if (secretToDelete is null)
-        return Results.NotFound($"Secret with removal key id '{removalKeyId}' not found.");
-
-    return Results.NoContent();
-}).Produces(StatusCodes.Status204NoContent);
-
+// Map endpoints
+app.MapSecretEndpoints();
 #endregion
 
 app.Run();

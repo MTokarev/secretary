@@ -5,6 +5,10 @@ export class SecretReturnDto {
   body: string= "";
   accessPassword: string= "";
   accessAttemptsLeft: number = 0;
+  createdOnUtc: string = "";
   availableFromUtc: string= "";
-  availableUntilUtc: string= ""
+  availableUntilUtc: string= "";
+  hasBeenCopied: boolean = false
+  decryptionKey: string = "";
+  linkToTheSecretCopied: boolean = true;
 }

@@ -5,15 +5,19 @@
     "swagger": "swagger/"
   },
   "siteConfig" :{
-    "siteAddress": "http://localhost:4200/",
+    "siteAddress": "https://localhost:4200/",
     "secret": "secret",
     "retryHttpCallInSeconds": 5
   },
   "auth": {
+    "autoLoginPopupSnoozeForDays": 1,
     "facebook": {
       "clientId": ""
     },
     "google": {
+      "clientId": ""
+    },
+    "microsoft": {
       "clientId": ""
     }
   }

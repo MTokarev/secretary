@@ -10,10 +10,14 @@ export class AppConfig {
     retryHttpCallInSeconds: 0
   }
   auth = {
+    autoLoginPopupSnoozeForDays: 30,
     facebook: {
       clientId: ''
     },
     google: {
+      clientId: ''
+    },
+    microsoft :{
       clientId: ''
     }
   }

@@ -1,6 +1,11 @@
 # Table of contents
 
 - [Secretary overview](#secretary-overview) 🔑
+  - [You can log in with a 3rd-party provider](#you-can-log-in-with-a-3rd-party-provider) ✅
+    - [Benefits for logged-in users](#benefits-for-logged-in-users)
+    - [Providers that are currently supported](#providers-that-are-currently-supported)
+    - [Front-End to Back-End communication](#front-end-to-back-end-communication)
+    - [What user data the app stores](#what-user-data-the-app-stores)
   - [Is it rocket science?](#is-it-rocket-science) 🚀
   - [What can I do with this service?](#what-can-i-do-with-this-service) ❓
   - [What this service is about?](#what-this-service-is-about) 👍🏼
@@ -23,7 +28,85 @@
 The Secretary is a free online service that was created to securely share your confidential data with the recipient.
 
 Many people today send sensitive data using email, social networks, or public IMs. Even though many services do a great job security wise, this doesn't solve the problems of data disposal. A hacked mailbox\account can provide an attacker with confidential information as many users keep received secrets in inboxes.
-The secretary never stores unencrypted data and any keys inside that can be used to decrypt your secrets.
+The secretary never stores unencrypted data and decryption keys for anonymous users.
+
+
+## You can log in with a 3rd-party provider
+
+While you can use this service anonymously, there is a cool feature that allows you to log in using 3rd-party providers.
+
+
+### Benefits for logged-in users
+
+If you log in to the app, you have control over all secrets that you've shared. You can interact with these items, such as viewing secret info, copying secrets, secret URLs, or deleting secrets altogether.
+
+`Upcoming feature: Soon you will be able to set the secret recipient from supported 3rd-party providers. All those secrets will be shown once the recipient logs in.`
+
+### Providers that are currently supported
+
+You need to provide configuration for providers that the project supports. Primarily, you need to register the client application with each provider and add configuration for the front and back ends. Please make sure that your site address is added to the redirect URL for your registered app (for local debugging, you can add http://localhost:4200 || https://localhost:4200).
+
+Supported providers:
+
+Microsoft
+Google
+Facebook
+Configuration examples =>
+
+Front-End (`config-prd.json`):
+```json
+"auth": {
+    "autoLoginPopupSnoozeForDays": 90,
+    "facebook": {
+      "clientId": "<ClientId>"
+    },
+    "google": {
+      "clientId": "<ClientId>"
+    },
+    "microsoft": {
+      "clientId": "<ClientId>"
+    }
+```
+
+`autoLoginPopupSnoozeForDays`` - Required to handle auto-login cases. If the popup is disabled, the user will get a warning toast. If the user ignores or closes this notification, then we won't be annoying the user with the same warning message for 'x' amount of days.
+
+Back-End (`appsettings.json`):
+```json
+"AuthOptions": {
+    "Providers": {
+      "Facebook": {
+        "BaseUrl": "https://graph.facebook.com/v18.0/",
+        "UserProfileEndpoint": "me",
+        "TokenEndpoint": "debug_token",
+        "ClientId": "<ClientId>",
+        "ClientSecret": "<ClientSecret>"
+      },
+      "Google": {
+        "BaseUrl": "https://www.googleapis.com/oauth2/v3/",
+        "TokenEndpoint": "tokeninfo"
+      },
+      "Microsoft": {
+        "BaseUrl": "https://graph.microsoft.com/v1.0/",
+        "UserProfileEndpoint": "me"
+      }
+    }
+  }
+```
+Client id and secret are required only for the Facebook provider.
+
+If the client id is missing or empty in the front-end configuration file, then the `Login` button won't show up in the UI, and no auth providers will be configured.
+
+### Front-End to Back-End communication
+
+Once the user logs in and tries to fetch created secrets, the token and the provider name will be attached to the request. The request will then be routed to the backend. The backend will use the issued token and check if the token is valid. For some providers, it will re-use this token to get user information, such as email.
+
+If the token is not valid, then the user will get an Unauthorized HTTP 401 response.
+
+
+### What user data the app stores
+
+For logged in users the service stores the only `Email Address`. And only on the secrets entity.
+No other information is recorded.
 
 ## Is it rocket science?
 

@@ -8,10 +8,14 @@
     "retryHttpCallInSeconds": 5
   },
   "auth": {
+    "autoLoginPopupSnoozeForDays": 90,
     "facebook": {
       "clientId": ""
     },
     "google": {
+      "clientId": ""
+    },
+    "microsoft": {
       "clientId": ""
     }
   }

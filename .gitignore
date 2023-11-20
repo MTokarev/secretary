@@ -13,6 +13,7 @@ msbuild.log
 msbuild.err
 msbuild.wrn
 
+
 # Visual Studio conf
 .vs/
 .cscode/
@@ -23,6 +24,10 @@ msbuild.wrn
 
 # Database
 app.db*
+
+.idea/
+.angular/
+node_modules/
 
 # from Angular
 # See http://help.github.com/ignore-files/ for more about ignoring files.
