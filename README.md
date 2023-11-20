@@ -51,7 +51,8 @@ Supported providers:
 - Microsoft
 - Google
 - Facebook
-- Configuration examples =>
+    
+Configuration examples =>
 
 Front-End (`config-prd.json`):
 ```json
