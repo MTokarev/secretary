@@ -16,7 +16,7 @@ public class MicrosoftTokenHandler : TokenHandlerBase
 {
     public override AuthProviders ProviderType => AuthProviders.Microsoft;
     
-    private const int DefaultTokenTtlInHours = 12;
+    private const int DefaultTokenTtlInHours = 2;
     
     private readonly ILogger<FacebookTokenHandler> _logger;
     private readonly Provider _provider;
