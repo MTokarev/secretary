@@ -25,14 +25,12 @@ public class MicrosoftTokenHandler : TokenHandlerBase
     public MicrosoftTokenHandler(IHttpClientFactory httpClientFactory,
         IMemoryCache memoryCache,
         IOptions<AuthOptions> options,
-        ILogger<FacebookTokenHandler> logger) : base(memoryCache, options)
+        ILogger<FacebookTokenHandler> logger) : base(memoryCache, options, logger)
     {
-        ValidateOptions();
-        
+        _logger = logger;
         _httpClient = httpClientFactory.CreateClient();
         _provider = _options.Providers[nameof(AuthProviders.Microsoft)];
         _httpClient.BaseAddress = new Uri(_provider.BaseUrl);
-        _logger = logger;
     }
 
     /// <summary>

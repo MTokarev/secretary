@@ -50,11 +50,11 @@ body { margin: 0; font-family: Montserrat, "Helvetica Neue", sans-serif; backgro
 }
 
 .invalid-control {
-  -webkit-animation: invalid-control 3s infinite; 
-  
+  -webkit-animation: invalid-control 3s infinite;
+
   /* Internet Explorer */
   -ms-animation: invalid-control 3s infinite;
-  
+
   /* Standard Syntax */
   animation: invalid-control 3s infinite;
 }
@@ -74,7 +74,7 @@ body { margin: 0; font-family: Montserrat, "Helvetica Neue", sans-serif; backgro
   border-radius: 25px;
   border-style: solid;
   background-color: transparent;
-  min-width: 190px;
+  min-width: 200px;
   min-height: 45px;
   cursor: pointer;
   transition: all .5s ease;
@@ -93,7 +93,7 @@ body { margin: 0; font-family: Montserrat, "Helvetica Neue", sans-serif; backgro
 }
 
 @keyframes invalid-control{
-  0%{color:red;}	
+  0%{color:red;}
 	110%{color: black;}
 }
 

@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Secretary.ApiEndpoints;
 using Secretary.Data;
+using Secretary.Extensions;
 using Secretary.Interfaces;
 using Secretary.Models;
 using Secretary.Options;
 using Secretary.Services;
-using Secretary.Validators;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -51,13 +51,8 @@ builder.Services.AddScoped<IGenericRepository<Secret>, GenericRepository<Secret>
 
 builder.Services.AddHttpClient();
 
-// Validators setup.
-// Memory cache is required to work properly, make sure you register it as a DI.
-builder.Services.Configure<AuthOptions>(builder.Configuration.GetSection(nameof(AuthOptions)));
-builder.Services.AddScoped<ITokenHandler, FacebookTokenHandler>();
-builder.Services.AddScoped<ITokenHandler, GoogleTokenHandler>();
-builder.Services.AddScoped<ITokenHandler, MicrosoftTokenHandler>();
-builder.Services.AddScoped<ITokenService, TokenService>();
+// Auth setup.
+builder.Services.RegisterTokenHandlers(builder.Configuration);
 
 // Encryption service config.
 builder.Services.AddScoped<IEncryptionService, EncryptionService>();

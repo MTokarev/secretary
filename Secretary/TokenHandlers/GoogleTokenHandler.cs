@@ -23,20 +23,12 @@ public class GoogleTokenHandler : TokenHandlerBase
         IMemoryCache memoryCache,
         ILogger<GoogleTokenHandler> logger,
         IHttpClientFactory httpClientFactory,
-        IOptions<AuthOptions> options) : base(memoryCache, options)
+        IOptions<AuthOptions> options) : base(memoryCache, options, logger)
     {
+        _logger = logger;
         _provider = _options.Providers[nameof(AuthProviders.Google)];
-        ValidateOptions((_provider) =>
-        {
-            if (string.IsNullOrEmpty(_provider.TokenEndpoint))
-            {
-                throw new MissingTokenValidatorConfigurationException($"Provider '{ProviderType}' exist in the configuration." +
-                    $" However, '{nameof(_provider.TokenEndpoint)}' isn't set.");
-            }
-        });
         _httpClient = httpClientFactory.CreateClient();
         _httpClient.BaseAddress = new Uri(_provider.BaseUrl);
-        _logger = logger;
     }
 
     public override AuthProviders ProviderType => AuthProviders.Google;

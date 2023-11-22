@@ -1,5 +1,15 @@
 import {formatDate} from '@angular/common';
-import {AfterViewInit, Component, ElementRef, Inject, LOCALE_ID, OnDestroy, OnInit, Renderer2} from '@angular/core';
+import {
+  AfterViewChecked,
+  AfterViewInit,
+  Component,
+  ElementRef,
+  Inject,
+  LOCALE_ID,
+  OnDestroy,
+  OnInit,
+  Renderer2
+} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {SecretCreateDto} from '../models/secret-create-dto.model';
 import {SecretReturnDto} from '../models/secret-return-dto.model';
@@ -143,12 +153,17 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.initSecretForm();
   }
-
   setFocusOnSecretBody() {
     const elementToFocus = this.element.nativeElement.querySelector("#secretBody");
     if (elementToFocus) {
       this.renderer.selectRootElement(elementToFocus).focus();
     }
+
+    // Nasty workaround to scroll to the top of the screen
+    // On mobile devices it doesn't work without timeout
+    setTimeout(() => {
+      window.scrollTo(0, 0);
+    }, 10);
   }
 
   toggleDropdown () {

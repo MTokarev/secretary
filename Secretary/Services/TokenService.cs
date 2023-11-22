@@ -49,7 +49,7 @@ public class TokenService : ITokenService
             return tokenHandler;
         }
         
-        var message = $"Provider '{provider}' is not supported.";
+        var message = $"Requested provider '{provider}' is not supported.";
         _logger.LogWarning(message);
 
         throw new AuthProviderNotSupportedException(message);

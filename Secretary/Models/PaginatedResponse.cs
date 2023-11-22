@@ -10,11 +10,11 @@ public class PaginatedResponse<T>
     /// Current page
     /// </summary>
     public int Page { get; set; }
-    
+
     /// <summary>
-    /// Page size
+    /// Page size. Default: 10
     /// </summary>
-    public int PageSize { get; set; }
+    public int PageSize { get; set; } = 10;
     
     /// <summary>
     /// Total items

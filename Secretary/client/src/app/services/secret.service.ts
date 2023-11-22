@@ -13,12 +13,13 @@ import {PaginatedResult} from "../models/paginated-result";
 })
 export class SecretService {
   private secretsUrl = ConfigLoaderService.config.urls.base + ConfigLoaderService.config.urls.secrets;
+  private pageSize = ConfigLoaderService.config.mySecretPageSize;
 
   constructor(private client: HttpClient) { }
 
-  getSecretsSharedByUser(user: SocialUser, page: number = 1, pageSize = 4) {
+  getSecretsSharedByUser(user: SocialUser, page: number = 1) {
     const httpOptions = {
-      params: new HttpParams().set("page", page).set("pageSize", pageSize),
+      params: new HttpParams().set("page", page).set("pageSize", this.pageSize),
       headers: new HttpHeaders({
         authDto: `provider,${user.provider},token,${user.authToken ?? user.idToken}`
       })

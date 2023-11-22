@@ -21,4 +21,5 @@ export class AppConfig {
       clientId: ''
     }
   }
+  mySecretPageSize = 10;
 }

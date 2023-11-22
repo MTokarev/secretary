@@ -34,18 +34,20 @@ namespace Secretary.Services
             int pageSize = 10)
         {
             var totalItems = await _repo.GetCount(expression);
+            
             var paginatedResponse = new PaginatedResponse<SecretDto>
             {
                 Page = page == 0 
                     ? 1
                     : page,
+                PageSize = pageSize,
                 TotalItems = totalItems
             };
-            
+
             // TODO: We need to return a result where the client can get the reason of seeing an empty result
             // why empty result is returned.
             if (totalItems == 0 
-                || page > paginatedResponse.TotalPages)
+                || paginatedResponse.Page > paginatedResponse.TotalPages)
             {
                 paginatedResponse.Data = Enumerable.Empty<SecretDto>();
                 return paginatedResponse;
@@ -64,7 +66,7 @@ namespace Secretary.Services
                 , pageSize, 
                 skipItems);
             paginatedResponse.Data = secrets.Select(SecretDto.CreateFromSecret);
-
+            
             return paginatedResponse;
         }
 

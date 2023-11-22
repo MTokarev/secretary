@@ -160,4 +160,21 @@ export class MySecretsComponent implements OnInit {
     const now = new Date();
     return new Date(now.getTime() + (now.getTimezoneOffset() * 60000));
   }
+
+  get isPreviousPageButtonDisabled(): boolean {
+    if (this.paginatedResult?.page)
+    {
+      return this.paginatedResult.page <= 1;
+    }
+
+    return true;
+  }
+
+  get isNextPageButtonDisabled(): boolean {
+    if (this.paginatedResult?.page && this.paginatedResult?.totalPages)
+    {
+      return this.paginatedResult.page === this.paginatedResult.totalPages
+    }
+    return true;
+  }
 }

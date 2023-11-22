@@ -46,6 +46,14 @@ export function initializeAuth(configLoader: ConfigLoaderService) {
     });
   }
 
+  // Add Facebook if config exist
+  if (ConfigLoaderService.config.auth?.facebook?.clientId?.length > 0) {
+    baseConfig.providers.push({
+      id: FacebookLoginProvider.PROVIDER_ID,
+      provider: new FacebookLoginProvider(ConfigLoaderService.config.auth.facebook.clientId),
+    });
+  }
+
   // Add Google if config exist
   if (ConfigLoaderService.config.auth?.google?.clientId?.length > 0) {
     baseConfig.providers.push({

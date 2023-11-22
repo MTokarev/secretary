@@ -15,13 +15,15 @@ namespace Secretary.Validators;
 public abstract class TokenHandlerBase : ITokenHandler
 {
     protected readonly IMemoryCache _memoryCache;
+    protected readonly ILogger<TokenHandlerBase> _logger;
     protected readonly AuthOptions _options;
     
     public abstract AuthProviders ProviderType { get; }
 
-    protected TokenHandlerBase(IMemoryCache memoryCache, IOptions<AuthOptions> options)
+    protected TokenHandlerBase(IMemoryCache memoryCache, IOptions<AuthOptions> options, ILogger<TokenHandlerBase> logger)
     {
         _memoryCache = memoryCache;
+        _logger = logger;
         _options = options.Value;
     }
     
@@ -35,30 +37,4 @@ public abstract class TokenHandlerBase : ITokenHandler
     /// </summary>
     public abstract ValueTask<TokenResponse> GetTokenResponseAsync(string token,
         CancellationToken cancellationToken = default);
-
-    /// <summary>
-    /// Validates if options are present for auth provide
-    /// </summary>
-    /// <exception cref="MissingTokenValidatorConfigurationException"></exception>
-    protected virtual void ValidateOptions(Action<Provider> additionalCheck = default)
-    {
-        // 'Enum.GetName()' is used to avoid boxing\unboxing
-        if (!_options.Providers.TryGetValue(Enum.GetName(typeof(AuthProviders), ProviderType), out var provider))
-        {
-            throw new NotImplementedException($"Unable to locate '{nameof(ProviderType)}' in configuration." 
-                + " Please make sure that configuration exist");
-        }
-
-        if (string.IsNullOrEmpty(provider.ClientId)
-            || string.IsNullOrEmpty(provider.BaseUrl))
-        {
-            throw new MissingTokenValidatorConfigurationException($"Provider '{ProviderType}' exist in the configuration, "
-              + $"but required parameters are missing. Make sure {nameof(provider.BaseUrl)}' is set.");
-        }
-
-        if (additionalCheck != null)
-        {
-            additionalCheck.Invoke(provider);
-        }
-    }
 }

@@ -24,28 +24,13 @@ public class FacebookTokenHandler : TokenHandlerBase
         IHttpClientFactory httpClientFactory,
         IMemoryCache memoryCache,
         IOptions<AuthOptions> options,
-        ILogger<FacebookTokenHandler> logger) : base(memoryCache, options)
+        ILogger<FacebookTokenHandler> logger) : base(memoryCache, options, logger)
     {
-        base.ValidateOptions(provider =>
-        {
-            if (string.IsNullOrEmpty(provider.UserProfileEndpoint)
-                || string.IsNullOrEmpty(provider.TokenEndpoint)
-                || string.IsNullOrEmpty(provider.ClientId)
-                || string.IsNullOrEmpty(provider.ClientSecret))
-            {
-                throw new MissingTokenValidatorConfigurationException($"Provider '{ProviderType}' exist in the configuration, "
-                  + $"but the properties '{nameof(provider.UserProfileEndpoint)}, {nameof(provider.TokenEndpoint)}, " +
-                  $"{nameof(provider.ClientId)}, {nameof(provider.ClientSecret)}' aren't set.");
-            }
-        });
-        
+        _logger = logger;
         _httpClient = httpClientFactory.CreateClient();
         _provider = _options.Providers[nameof(AuthProviders.Facebook)];
         _httpClient.BaseAddress = new Uri(_provider.BaseUrl);
-        _logger = logger;
-
     }
-    
     /// <summary>
     /// <see cref="TokenHandlerBase"/>
     /// </summary>

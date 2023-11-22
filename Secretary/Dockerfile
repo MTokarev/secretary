@@ -1,19 +1,17 @@
-# See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
-
-FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
+# OS tag is required here where your targed runtime is x64, but the docker build runs on Apple silicone
+FROM mcr.microsoft.com/dotnet/aspnet:8.0.0-bookworm-slim-amd64 AS base
 WORKDIR /app
 
-# Build backend
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+# Build backend 
+FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
-COPY ["Secretary.csproj", "./"]
-RUN dotnet restore "./Secretary.csproj"
+COPY ["Secretary.csproj", "."]
+RUN dotnet restore
 COPY . .
-WORKDIR "/src/."
-RUN dotnet build "Secretary.csproj" -c Release -o /app/build
+RUN dotnet build "Secretary.csproj" -c Release -o /app/build -r linux-x64
 
 # Build frontend
-FROM node:16 AS node
+FROM node:20 AS node
 WORKDIR /src
 COPY ["client", "./"]
 RUN npm install -g @angular/cli; npm install; ng build

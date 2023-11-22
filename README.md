@@ -30,7 +30,6 @@ The Secretary is a free online service that was created to securely share your c
 Many people today send sensitive data using email, social networks, or public IMs. Even though many services do a great job security wise, this doesn't solve the problems of data disposal. A hacked mailbox\account can provide an attacker with confidential information as many users keep received secrets in inboxes.
 The secretary never stores unencrypted data and decryption keys for anonymous users.
 
-
 ## You can log in with a 3rd-party provider
 
 While you can use this service anonymously, there is a cool feature that allows you to log in using 3rd-party providers.
@@ -216,6 +215,8 @@ Have an idea, or would like to discuss something? Please join our [discussions o
 
 ## Rather than a thousand words (demo)
  
- ![demo](./docs/demo.gif)
+If you don't see the `Login` button, then you have probably didn't add auth providers configuration.
+
+![demo](./docs/demo.gif)
 
 
