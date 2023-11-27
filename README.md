@@ -190,7 +190,7 @@ I am not a docker expert, but I might spend some time later on making parameters
 
 ## Information for nerds
 
-* Backend is written in .NET (8).
+* Backend is written in C# using ASP.NET (8).
 * Multi-platform, you can build it to run on Windows, Mac, and Linux.
 * Front-end uses Angular framework (17).
 * Data layer uses an entity framework, hence it is easy to use any supported servers (MySQL, MSSQL, CosmosDB, etc...), but currently SQLite is used as a storage.
