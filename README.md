@@ -190,13 +190,13 @@ I am not a docker expert, but I might spend some time later on making parameters
 
 ## Information for nerds
 
-* Backend is written in .NET (6).
+* Backend is written in .NET (8).
 * Multi-platform, you can build it to run on Windows, Mac, and Linux.
-* Front-end uses Angular framework (14).
+* Front-end uses Angular framework (17).
 * Data layer uses an entity framework, hence it is easy to use any supported servers (MySQL, MSSQL, CosmosDB, etc...), but currently SQLite is used as a storage.
-* Kestrel web server is used to serve both the front end and back end.
+* Kestrel web server is used to serve both the front end and back ends.
 * Swagger is used to simplify API integrations.
-* Throttling is enabled to protect service from robots and brute-force attacks. After 'x'  access attempts from the same IP, the request will be throttled with HTTP429 (Too many requests).
+* Throttling is enabled to protect service from robots and brute-force attacks. After 'x' access attempts (you can configure this behavior in `appsettings.json`) from the same IP, the request will be throttled with HTTP429 (Too many requests).
 
 ### How encryption works
 
