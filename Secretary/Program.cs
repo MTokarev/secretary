@@ -106,8 +106,20 @@ app.UseIpRateLimiting();
 app.UseHttpsRedirection();
 
 // Configure fallback to the index.html to allow Angular handle the routing.
-app.MapFallbackToFile(Path.Combine(builder.Environment.ContentRootPath, "release", "wwwroot", "/index.html"));
-app.UseStaticFiles();
+app.MapFallbackToFile(Path.Combine(builder.Environment.WebRootPath, "/index.html"));
+app.UseStaticFiles(new StaticFileOptions
+{
+    // This is required to read config on the clients every one hours.
+    // Without this setting the config will be cached forever, and in case of change in the configuration
+    // the only option would be to do a force refresh on client browser or clear browser cache.
+    OnPrepareResponse = ctx =>
+    {
+        if (string.Equals(ctx.File.Name, "config.prod.json", StringComparison.OrdinalIgnoreCase))
+        {
+            ctx.Context.Response.Headers.TryAdd("Cache-Control", "public,max-age=3600");
+        }
+    }
+});
 
 // Map endpoints
 app.MapSecretEndpoints();
